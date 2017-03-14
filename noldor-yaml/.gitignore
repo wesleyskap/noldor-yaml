@@ -1,0 +1,16 @@
+# Binaries and build artifacts
+bin/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# IDE and Gemini files
+.idea/
+.vscode/
+.gemini/
+
+# Testing and coverage
+coverage.out
+*.tmp
+*.log
