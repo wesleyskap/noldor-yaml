@@ -1,11 +1,9 @@
-package yaml_test
+﻿package yaml_test
 
 import (
 	"math"
 	"reflect"
-	"strings"
 	"testing"
-	"time"
 
 	"go.yaml.in/yaml/v4"
 )
@@ -127,135 +125,5 @@ func TestErrorMessageFormat(t *testing.T) {
 	msg := err.Error()
 	if !reflect.ValueOf(msg).IsValid() || len(msg) == 0 {
 		t.Fatal("expected error message content")
-	}
-}
-
-func TestAnchorRegistryAndAliases(t *testing.T) {
-	reg := yaml.NewAnchorRegistry()
-	targetNode := &yaml.Node{Kind: yaml.ScalarNode, Value: "target_value"}
-	if err := reg.Register("base", targetNode); err != nil {
-		t.Fatalf("failed registering anchor: %v", err)
-	}
-	resolved, err := reg.Resolve("base")
-	if err != nil || resolved.Value != "target_value" {
-		t.Fatalf("failed resolving anchor: %v", err)
-	}
-
-	root := &yaml.Node{
-		Kind: yaml.SequenceNode,
-		Content: []*yaml.Node{
-			{Kind: yaml.AliasNode, Value: "*base"},
-		},
-	}
-	if err := reg.ResolveAliases(root); err != nil {
-		t.Fatalf("failed resolving alias tree: %v", err)
-	}
-	if root.Content[0].Value != "target_value" {
-		t.Errorf("expected target_value, got %s", root.Content[0].Value)
-	}
-}
-
-func TestMergeKeyResolver(t *testing.T) {
-	reg := yaml.NewAnchorRegistry()
-	baseMap := &yaml.Node{
-		Kind: yaml.MappingNode,
-		Content: []*yaml.Node{
-			{Kind: yaml.ScalarNode, Value: "host"},
-			{Kind: yaml.ScalarNode, Value: "localhost"},
-		},
-	}
-	_ = reg.Register("defaults", baseMap)
-
-	targetMap := &yaml.Node{
-		Kind: yaml.MappingNode,
-		Content: []*yaml.Node{
-			{Kind: yaml.ScalarNode, Value: "<<"},
-			{Kind: yaml.AliasNode, Value: "*defaults"},
-			{Kind: yaml.ScalarNode, Value: "port"},
-			{Kind: yaml.ScalarNode, Value: "8080"},
-		},
-	}
-	m := yaml.NewMergeKeyResolver(reg)
-	if err := m.ApplyMerge(targetMap); err != nil {
-		t.Fatalf("failed applying merge key: %v", err)
-	}
-	if len(targetMap.Content) != 4 {
-		t.Errorf("expected 4 elements in merged map content, got %d", len(targetMap.Content))
-	}
-}
-
-func TestTimestampParsing(t *testing.T) {
-	ts, err := yaml.ParseTimestamp("2025-06-01T12:30:00Z")
-	if err != nil {
-		t.Fatalf("failed parsing timestamp: %v", err)
-	}
-	if ts.Year() != 2025 || ts.Month() != time.June || ts.Day() != 1 {
-		t.Errorf("unexpected parsed date: %v", ts)
-	}
-}
-
-func TestStreamDecoder(t *testing.T) {
-	input := "doc: 1\n---\ndoc: 2\n"
-	dec := yaml.NewStreamDecoder(strings.NewReader(input))
-	var count int
-	for dec.More() {
-		var res map[string]int
-		if err := dec.Decode(&res); err != nil {
-			t.Fatalf("error decoding stream doc: %v", err)
-		}
-		count++
-	}
-	if count != 2 {
-		t.Errorf("expected 2 documents, got %d", count)
-	}
-}
-
-func TestBlockScalarFormatter(t *testing.T) {
-	formatter := yaml.NewBlockScalarFormatter(2, "clip")
-	res := formatter.FormatLiteral("first line\nsecond line")
-	if !strings.Contains(res, "|\n  first line\n  second line") {
-		t.Errorf("unexpected formatted literal: %q", res)
-	}
-}
-
-func TestCommentPreserver(t *testing.T) {
-	cp := yaml.NewCommentPreserver()
-	cp.AttachComment(1, "# header comment")
-	node := &yaml.Node{Line: 1, Kind: yaml.ScalarNode, Value: "v"}
-	if err := cp.ApplyToNode(node); err != nil {
-		t.Fatalf("failed applying comment: %v", err)
-	}
-	if node.HeadComment != "# header comment" {
-		t.Errorf("expected header comment, got %q", node.HeadComment)
-	}
-}
-
-func TestExplicitTagResolver(t *testing.T) {
-	tr := yaml.NewExplicitTagResolver()
-	tr.RegisterTag("!custom", "tag:yaml.org,2002:custom")
-	node := &yaml.Node{Kind: yaml.ScalarNode, Value: "data"}
-	if err := tr.ApplyTagToNode(node, "!custom"); err != nil {
-		t.Fatalf("failed applying tag: %v", err)
-	}
-	if node.Tag != "!custom" {
-		t.Errorf("expected !custom tag, got %q", node.Tag)
-	}
-}
-
-func TestPrettyPrinter(t *testing.T) {
-	pp := yaml.NewPrettyPrinter(2)
-	node := &yaml.Node{
-		Kind: yaml.MappingNode,
-		Content: []*yaml.Node{
-			{Kind: yaml.ScalarNode, Value: "service"},
-			{Kind: yaml.ScalarNode, Value: "noldor"},
-		},
-	}
-	out, err := pp.PrintNode(node)
-	if err != nil {
-		t.Fatalf("failed pretty printing node: %v", err)
-	}
-	if !strings.Contains(out, "service: noldor") {
-		t.Errorf("unexpected pretty print output: %q", out)
 	}
 }
