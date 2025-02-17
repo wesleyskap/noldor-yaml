@@ -13,3 +13,9 @@ func NewAnchorRegistry() *AnchorRegistry {
 		anchors: make(map[string]*Node),
 	}
 }
+
+// Register stores a node under an anchor name.
+func (r *AnchorRegistry) Register(name string, n *Node) error {
+	r.anchors[name] = n
+	return nil
+}
