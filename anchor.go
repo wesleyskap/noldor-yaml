@@ -1,13 +1,13 @@
 ﻿package yaml
 
+import "fmt"
+
 // AnchorRegistry maintains anchor definitions and alias resolutions.
 type AnchorRegistry struct {
 	anchors map[string]*Node
 }
 
 // NewAnchorRegistry creates a new anchor table.
-// Usage example:
-//   reg := NewAnchorRegistry()
 func NewAnchorRegistry() *AnchorRegistry {
 	return &AnchorRegistry{
 		anchors: make(map[string]*Node),
@@ -16,6 +16,12 @@ func NewAnchorRegistry() *AnchorRegistry {
 
 // Register stores a node under an anchor name.
 func (r *AnchorRegistry) Register(name string, n *Node) error {
+	if name == "" {
+		return fmt.Errorf("yaml: invalid empty anchor name, expected non-empty string identifier")
+	}
+	if n == nil {
+		return fmt.Errorf("yaml: cannot register nil node for anchor %q", name)
+	}
 	r.anchors[name] = n
 	return nil
 }
