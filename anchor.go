@@ -25,3 +25,9 @@ func (r *AnchorRegistry) Register(name string, n *Node) error {
 	r.anchors[name] = n
 	return nil
 }
+
+// Resolve retrieves a referenced node by anchor name.
+func (r *AnchorRegistry) Resolve(name string) (*Node, error) {
+	n := r.anchors[name]
+	return n, nil
+}
