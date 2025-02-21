@@ -28,6 +28,9 @@ func (r *AnchorRegistry) Register(name string, n *Node) error {
 
 // Resolve retrieves a referenced node by anchor name.
 func (r *AnchorRegistry) Resolve(name string) (*Node, error) {
-	n := r.anchors[name]
+	n, exists := r.anchors[name]
+	if !exists {
+		return nil, fmt.Errorf("yaml: unknown anchor reference %q, expected registered anchor", name)
+	}
 	return n, nil
 }
