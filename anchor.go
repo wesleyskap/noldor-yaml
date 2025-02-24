@@ -34,3 +34,24 @@ func (r *AnchorRegistry) Resolve(name string) (*Node, error) {
 	}
 	return n, nil
 }
+
+// ResolveAliases walks an AST node recursively and substitutes AliasNodes.
+func (r *AnchorRegistry) ResolveAliases(n *Node) error {
+	if n == nil {
+		return nil
+	}
+	for i, child := range n.Content {
+		if child.Kind == AliasNode && child.Value != "" {
+			target, err := r.Resolve(child.Value)
+			if err != nil {
+				return err
+			}
+			n.Content[i] = target
+		} else {
+			if err := r.ResolveAliases(child); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
