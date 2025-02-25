@@ -1,6 +1,9 @@
 ﻿package yaml
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 // AnchorRegistry maintains anchor definitions and alias resolutions.
 type AnchorRegistry struct {
@@ -42,7 +45,7 @@ func (r *AnchorRegistry) ResolveAliases(n *Node) error {
 	}
 	for i, child := range n.Content {
 		if child.Kind == AliasNode && child.Value != "" {
-			target, err := r.Resolve(child.Value)
+			target, err := r.Resolve(strings.TrimPrefix(child.Value, "*"))
 			if err != nil {
 				return err
 			}
