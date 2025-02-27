@@ -127,3 +127,15 @@ func TestErrorMessageFormat(t *testing.T) {
 		t.Fatal("expected error message content")
 	}
 }
+
+func TestAnchorRegistry(t *testing.T) {
+	reg := yaml.NewAnchorRegistry()
+	targetNode := &yaml.Node{Kind: yaml.ScalarNode, Value: "target_value"}
+	if err := reg.Register("base", targetNode); err != nil {
+		t.Fatalf("failed registering anchor: %v", err)
+	}
+	resolved, err := reg.Resolve("base")
+	if err != nil || resolved.Value != "target_value" {
+		t.Fatalf("failed resolving anchor: %v", err)
+	}
+}
