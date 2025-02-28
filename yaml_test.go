@@ -139,3 +139,22 @@ func TestAnchorRegistry(t *testing.T) {
 		t.Fatalf("failed resolving anchor: %v", err)
 	}
 }
+
+func TestAnchorAliases(t *testing.T) {
+	reg := yaml.NewAnchorRegistry()
+	targetNode := &yaml.Node{Kind: yaml.ScalarNode, Value: "target_value"}
+	_ = reg.Register("base", targetNode)
+
+	root := &yaml.Node{
+		Kind: yaml.SequenceNode,
+		Content: []*yaml.Node{
+			{Kind: yaml.AliasNode, Value: "*base"},
+		},
+	}
+	if err := reg.ResolveAliases(root); err != nil {
+		t.Fatalf("failed resolving alias tree: %v", err)
+	}
+	if root.Content[0].Value != "target_value" {
+		t.Errorf("expected target_value, got %s", root.Content[0].Value)
+	}
+}
