@@ -6,11 +6,14 @@ import (
 )
 
 // AnchorRegistry maintains anchor definitions and alias resolutions.
+// Struct fields are memory-aligned from largest to smallest byte size.
 type AnchorRegistry struct {
 	anchors map[string]*Node
 }
 
 // NewAnchorRegistry creates a new anchor table.
+// Usage example:
+//   reg := NewAnchorRegistry()
 func NewAnchorRegistry() *AnchorRegistry {
 	return &AnchorRegistry{
 		anchors: make(map[string]*Node),
@@ -18,6 +21,8 @@ func NewAnchorRegistry() *AnchorRegistry {
 }
 
 // Register stores a node under an anchor name.
+// Usage example:
+//   err := reg.Register("base_config", node)
 func (r *AnchorRegistry) Register(name string, n *Node) error {
 	if name == "" {
 		return fmt.Errorf("yaml: invalid empty anchor name, expected non-empty string identifier")
@@ -30,6 +35,8 @@ func (r *AnchorRegistry) Register(name string, n *Node) error {
 }
 
 // Resolve retrieves a referenced node by anchor name.
+// Usage example:
+//   node, err := reg.Resolve("base_config")
 func (r *AnchorRegistry) Resolve(name string) (*Node, error) {
 	n, exists := r.anchors[name]
 	if !exists {
@@ -39,6 +46,8 @@ func (r *AnchorRegistry) Resolve(name string) (*Node, error) {
 }
 
 // ResolveAliases walks an AST node recursively and substitutes AliasNodes.
+// Usage example:
+//   err := reg.ResolveAliases(rootNode)
 func (r *AnchorRegistry) ResolveAliases(n *Node) error {
 	if n == nil {
 		return nil
@@ -58,3 +67,4 @@ func (r *AnchorRegistry) ResolveAliases(n *Node) error {
 	}
 	return nil
 }
+
