@@ -68,3 +68,4 @@ func (r *AnchorRegistry) ResolveAliases(n *Node) error {
 	return nil
 }
 
+// Usage note: map lookups are O(1) in AnchorRegistry.
