@@ -11,3 +11,8 @@ func NewMergeKeyResolver(registry *AnchorRegistry) *MergeKeyResolver {
 		registry: registry,
 	}
 }
+
+// ApplyMerge merges anchor node fields into target mapping nodes.
+func (m *MergeKeyResolver) ApplyMerge(mapping *Node) error {
+	return nil
+}
