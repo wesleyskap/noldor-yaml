@@ -1,18 +1,18 @@
 ﻿package yaml
 
-// MergeKeyResolver handles <<: *anchor map merging operations.
+import "fmt"
+
 type MergeKeyResolver struct {
 	registry *AnchorRegistry
 }
 
-// NewMergeKeyResolver constructs a resolver for merge keys.
 func NewMergeKeyResolver(registry *AnchorRegistry) *MergeKeyResolver {
-	return &MergeKeyResolver{
-		registry: registry,
-	}
+	return &MergeKeyResolver{registry: registry}
 }
 
-// ApplyMerge merges anchor node fields into target mapping nodes.
 func (m *MergeKeyResolver) ApplyMerge(mapping *Node) error {
+	if mapping == nil || mapping.Kind != MappingNode {
+		return fmt.Errorf("yaml: merge key can only be applied to MappingNode, got %v", mapping)
+	}
 	return nil
 }
