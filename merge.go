@@ -1,6 +1,9 @@
 ﻿package yaml
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type MergeKeyResolver struct {
 	registry *AnchorRegistry
@@ -16,8 +19,12 @@ func (m *MergeKeyResolver) ApplyMerge(mapping *Node) error {
 	}
 	for i := 0; i < len(mapping.Content); i += 2 {
 		keyNode := mapping.Content[i]
-		if keyNode.Value == "<<" {
-			// Found merge key token
+		valNode := mapping.Content[i+1]
+		if keyNode.Value == "<<" && valNode.Kind == AliasNode && m.registry != nil {
+			_, err := m.registry.Resolve(strings.TrimPrefix(valNode.Value, "*"))
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil
