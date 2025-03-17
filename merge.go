@@ -51,3 +51,4 @@ func (m *MergeKeyResolver) ApplyMerge(mapping *Node) error {
 	return nil
 }
 
+// Preserves existing keys when applying merged map properties.
