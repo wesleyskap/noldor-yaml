@@ -158,3 +158,29 @@ func TestAnchorAliases(t *testing.T) {
 		t.Errorf("expected target_value, got %s", root.Content[0].Value)
 	}
 }
+
+func TestMergeKey(t *testing.T) {
+	reg := yaml.NewAnchorRegistry()
+	baseMap := &yaml.Node{
+		Kind: yaml.MappingNode,
+		Content: []*yaml.Node{
+			{Kind: yaml.ScalarNode, Value: "host"},
+			{Kind: yaml.ScalarNode, Value: "localhost"},
+		},
+	}
+	_ = reg.Register("defaults", baseMap)
+
+	targetMap := &yaml.Node{
+		Kind: yaml.MappingNode,
+		Content: []*yaml.Node{
+			{Kind: yaml.ScalarNode, Value: "<<"},
+			{Kind: yaml.AliasNode, Value: "*defaults"},
+			{Kind: yaml.ScalarNode, Value: "port"},
+			{Kind: yaml.ScalarNode, Value: "8080"},
+		},
+	}
+	m := yaml.NewMergeKeyResolver(reg)
+	if err := m.ApplyMerge(targetMap); err != nil {
+		t.Fatalf("failed applying merge key: %v", err)
+	}
+}
