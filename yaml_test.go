@@ -184,3 +184,4 @@ func TestMergeKey(t *testing.T) {
 		t.Fatalf("failed applying merge key: %v", err)
 	}
 }
+// Verify merged content length check
