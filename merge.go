@@ -51,3 +51,4 @@ func (m *MergeKeyResolver) ApplyMerge(mapping *Node) error {
 	return nil
 }
 
+// Graceful nil registry handling
