@@ -5,8 +5,11 @@ import (
 )
 
 func ParseTimestamp(input string) (time.Time, error) {
-	if t, err := time.Parse(time.RFC3339, input); err == nil {
-		return t, nil
+	formats := []string{time.RFC3339, time.RFC3339Nano, "2006-01-02 15:04:05"}
+	for _, f := range formats {
+		if t, err := time.Parse(f, input); err == nil {
+			return t, nil
+		}
 	}
-	return time.Parse(time.RFC3339Nano, input)
+	return time.Time{}, nil
 }
