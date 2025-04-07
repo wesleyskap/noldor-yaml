@@ -13,3 +13,9 @@ func ParseTimestamp(input string) (time.Time, error) {
 	}
 	return time.Time{}, nil
 }
+
+// IsTimestampScalar checks if a string scalar matches common date patterns.
+func IsTimestampScalar(input string) bool {
+	_, err := ParseTimestamp(input)
+	return err == nil
+}
