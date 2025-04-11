@@ -185,3 +185,13 @@ func TestMergeKey(t *testing.T) {
 	}
 }
 // Verify merged content length check
+
+func TestTimestamp(t *testing.T) {
+	ts, err := yaml.ParseTimestamp("2025-06-01T12:30:00Z")
+	if err != nil {
+		t.Fatalf("failed parsing timestamp: %v", err)
+	}
+	if ts.Year() != 2025 {
+		t.Errorf("unexpected parsed date: %v", ts)
+	}
+}
