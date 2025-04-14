@@ -195,3 +195,4 @@ func TestTimestamp(t *testing.T) {
 		t.Errorf("unexpected parsed date: %v", ts)
 	}
 }
+// Verify date component assertions
