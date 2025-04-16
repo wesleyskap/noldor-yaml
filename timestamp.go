@@ -37,3 +37,4 @@ func IsTimestampScalar(input string) bool {
 	return err == nil
 }
 
+// Trim whitespace
