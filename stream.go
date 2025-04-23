@@ -8,3 +8,8 @@ type StreamDecoder struct {
 	docs   []string
 	index  int
 }
+
+// NewStreamDecoder initializes a streaming multi-document decoder.
+func NewStreamDecoder(r io.Reader) *StreamDecoder {
+	return &StreamDecoder{reader: r}
+}
