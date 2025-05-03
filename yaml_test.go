@@ -196,3 +196,19 @@ func TestTimestamp(t *testing.T) {
 	}
 }
 // Verify date component assertions
+
+func TestStream(t *testing.T) {
+	input := "doc: 1\n---\ndoc: 2\n"
+	dec := yaml.NewStreamDecoder(strings.NewReader(input))
+	var count int
+	for dec.More() {
+		var res map[string]int
+		if err := dec.Decode(&res); err != nil {
+			t.Fatalf("error decoding stream doc: %v", err)
+		}
+		count++
+	}
+	if count != 2 {
+		t.Errorf("expected 2 documents, got %d", count)
+	}
+}
