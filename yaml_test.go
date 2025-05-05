@@ -212,3 +212,4 @@ func TestStream(t *testing.T) {
 		t.Errorf("expected 2 documents, got %d", count)
 	}
 }
+// Verify stream iteration count
