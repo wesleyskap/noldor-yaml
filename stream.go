@@ -53,3 +53,4 @@ func (d *StreamDecoder) Decode(target interface{}) error {
 	return Unmarshal([]byte(content), target)
 }
 
+// Docstring with loop example
