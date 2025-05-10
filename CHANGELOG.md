@@ -2,10 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [4.3.0] - 2025-04-18
+## [4.4.0] - 2025-05-10
 
 ### Added
-- **ISO-8601 Timestamp Parser**: Native parsing for timestamps and dates into Go `time.Time` values in `timestamp.go`.
+- **Multi-Document Stream Decoder**: Sequential decoding for multi-document streams separated by `---` in `stream.go`.
+
+## [4.3.0] - 2025-04-18
+- Timestamp parser.
 
 ## [4.2.0] - 2025-03-26
 - Merge Key support.
