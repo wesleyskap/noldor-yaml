@@ -9,3 +9,4 @@ type BlockScalarFormatter struct {
 func NewBlockScalarFormatter(indent int, chomping string) *BlockScalarFormatter {
 	return &BlockScalarFormatter{indent: indent, chomping: chomping}
 }
+// Indentation configuration options
