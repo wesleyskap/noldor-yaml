@@ -57,4 +57,3 @@ func (b *BlockScalarFormatter) ParseLiteralBlock(lines []string) (string, error)
 	return strings.Join(clean, "\n"), nil
 }
 
-// Strip chomping indicator
