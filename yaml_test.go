@@ -213,3 +213,11 @@ func TestStream(t *testing.T) {
 	}
 }
 // Verify stream iteration count
+
+func TestBlockScalar(t *testing.T) {
+	formatter := yaml.NewBlockScalarFormatter(2, "clip")
+	res := formatter.FormatLiteral("first line\nsecond line")
+	if !strings.Contains(res, "|\n  first line\n  second line") {
+		t.Errorf("unexpected formatted literal: %q", res)
+	}
+}
