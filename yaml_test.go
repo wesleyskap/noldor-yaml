@@ -221,3 +221,4 @@ func TestBlockScalar(t *testing.T) {
 		t.Errorf("unexpected formatted literal: %q", res)
 	}
 }
+// Indentation padding test
