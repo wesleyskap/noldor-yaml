@@ -85,3 +85,4 @@ func (n *Node) IsZero() bool {
 	}
 	return n.Kind == 0 && n.Value == "" && len(n.Content) == 0
 }
+// LiteralStyle and FoldedStyle are exported
