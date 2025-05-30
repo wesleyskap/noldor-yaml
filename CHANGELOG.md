@@ -2,10 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [4.4.0] - 2025-05-10
+## [4.5.0] - 2025-05-30
 
 ### Added
-- **Multi-Document Stream Decoder**: Sequential decoding for multi-document streams separated by `---` in `stream.go`.
+- **Block Scalar Formatting**: Support for Literal (`|`) and Folded (`>`) multiline block text styles in `block_scalar.go`.
+
+## [4.4.0] - 2025-05-10
+- Multi-Document streaming.
 
 ## [4.3.0] - 2025-04-18
 - Timestamp parser.
