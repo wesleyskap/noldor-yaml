@@ -4,3 +4,7 @@
 type CommentPreserver struct {
 	comments map[int]string
 }
+
+func NewCommentPreserver() *CommentPreserver {
+	return &CommentPreserver{comments: make(map[int]string)}
+}
