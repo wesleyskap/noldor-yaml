@@ -8,3 +8,7 @@ type CommentPreserver struct {
 func NewCommentPreserver() *CommentPreserver {
 	return &CommentPreserver{comments: make(map[int]string)}
 }
+
+func (cp *CommentPreserver) AttachComment(line int, text string) {
+	cp.comments[line] = text
+}
