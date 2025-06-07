@@ -12,3 +12,7 @@ func NewCommentPreserver() *CommentPreserver {
 func (cp *CommentPreserver) AttachComment(line int, text string) {
 	cp.comments[line] = text
 }
+
+func (cp *CommentPreserver) GetComment(line int) string {
+	return cp.comments[line]
+}
