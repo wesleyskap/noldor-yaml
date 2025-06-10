@@ -52,3 +52,4 @@ func (cp *CommentPreserver) ApplyToNode(n *Node) error {
 	return nil
 }
 
+// Nil node pointer validation
