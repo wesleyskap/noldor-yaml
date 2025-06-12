@@ -222,3 +222,15 @@ func TestBlockScalar(t *testing.T) {
 	}
 }
 // Indentation padding test
+
+func TestComment(t *testing.T) {
+	cp := yaml.NewCommentPreserver()
+	cp.AttachComment(1, "# header comment")
+	node := &yaml.Node{Line: 1, Kind: yaml.ScalarNode, Value: "v"}
+	if err := cp.ApplyToNode(node); err != nil {
+		t.Fatalf("failed applying comment: %v", err)
+	}
+	if node.HeadComment != "# header comment" {
+		t.Errorf("expected header comment, got %q", node.HeadComment)
+	}
+}
