@@ -234,3 +234,4 @@ func TestComment(t *testing.T) {
 		t.Errorf("expected header comment, got %q", node.HeadComment)
 	}
 }
+// Child node persistence check
