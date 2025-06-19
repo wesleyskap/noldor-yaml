@@ -238,3 +238,4 @@ func ParseBytes(b []byte) (*Node, error) {
 	p := NewParser(bytes.NewReader(b))
 	return p.ParseTree()
 }
+// Parser hooks for comment lines
