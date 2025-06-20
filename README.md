@@ -15,3 +15,4 @@ Noldor YAML (`go.yaml.in/yaml/v4`) is a high-performance Go library for encoding
 - **ISO-8601 Timestamp Parser (`yaml.ParseTimestamp`)**: Automatic detection and conversion of date and timestamp scalars into time.Time.
 - **Multi-Document Streaming (`yaml.StreamDecoder`)**: Sequential streaming and decoding of multi-document YAML payloads separated by `---`.
 - **Block Scalar Formatter (`yaml.BlockScalarFormatter`)**: Full handling of literal (|) and folded (>) multiline block text styles.
+- **Comment Preserver (`yaml.CommentPreserver`)**: Preservation and association of comments within AST nodes.
