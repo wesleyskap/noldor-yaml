@@ -2,10 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [4.5.0] - 2025-05-30
+## [4.6.0] - 2025-06-20
 
 ### Added
-- **Block Scalar Formatting**: Support for Literal (`|`) and Folded (`>`) multiline block text styles in `block_scalar.go`.
+- **AST Comment Preserver**: Preservation of header, inline, and footer comments during parsing and AST traversal in `comment.go`.
+
+## [4.5.0] - 2025-05-30
+- Block scalar formatting.
 
 ## [4.4.0] - 2025-05-10
 - Multi-Document streaming.
