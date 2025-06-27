@@ -12,3 +12,10 @@ func NewExplicitTagResolver() *ExplicitTagResolver {
 func (tr *ExplicitTagResolver) RegisterTag(handle, uri string) {
 	tr.tags[handle] = uri
 }
+
+func (tr *ExplicitTagResolver) ResolveTag(handle string) string {
+	if uri, ok := tr.tags[handle]; ok {
+		return uri
+	}
+	return handle
+}
