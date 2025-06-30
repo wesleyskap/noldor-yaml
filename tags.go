@@ -49,3 +49,4 @@ func (tr *ExplicitTagResolver) ApplyTagToNode(n *Node, tag string) error {
 	return nil
 }
 
+// Nil node reference validation
