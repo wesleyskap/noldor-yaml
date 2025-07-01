@@ -235,3 +235,15 @@ func TestComment(t *testing.T) {
 	}
 }
 // Child node persistence check
+
+func TestExplicitTag(t *testing.T) {
+	tr := yaml.NewExplicitTagResolver()
+	tr.RegisterTag("!custom", "tag:yaml.org,2002:custom")
+	node := &yaml.Node{Kind: yaml.ScalarNode, Value: "data"}
+	if err := tr.ApplyTagToNode(node, "!custom"); err != nil {
+		t.Fatalf("failed applying tag: %v", err)
+	}
+	if node.Tag != "!custom" {
+		t.Errorf("expected !custom tag, got %q", node.Tag)
+	}
+}
