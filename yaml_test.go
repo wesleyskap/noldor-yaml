@@ -247,3 +247,4 @@ func TestExplicitTag(t *testing.T) {
 		t.Errorf("expected !custom tag, got %q", node.Tag)
 	}
 }
+// TaggedStyle bitflag mutation check
