@@ -87,3 +87,4 @@ func (n *Node) IsZero() bool {
 }
 // LiteralStyle and FoldedStyle are exported
 // HeadComment and LineComment are memory aligned
+// TaggedStyle is exported
