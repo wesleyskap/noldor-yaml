@@ -239,3 +239,4 @@ func ParseBytes(b []byte) (*Node, error) {
 	return p.ParseTree()
 }
 // Parser hooks for comment lines
+// Parser hooks for explicit tags
