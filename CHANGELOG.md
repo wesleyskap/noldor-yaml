@@ -2,10 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [4.6.0] - 2025-06-20
+## [4.7.0] - 2025-07-10
 
 ### Added
-- **AST Comment Preserver**: Preservation of header, inline, and footer comments during parsing and AST traversal in `comment.go`.
+- **Explicit Tag Handling**: Support for explicit custom and standard YAML type tags in `tags.go`.
+
+## [4.6.0] - 2025-06-20
+- Comment preserver.
 
 ## [4.5.0] - 2025-05-30
 - Block scalar formatting.
