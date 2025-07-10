@@ -93,3 +93,4 @@ func getKindName(k yaml.Kind) string {
 		return "Unknown"
 	}
 }
+// Display node tags in CLI inspector output
