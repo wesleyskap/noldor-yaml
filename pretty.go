@@ -11,3 +11,7 @@ func NewPrettyPrinter(indent int) *PrettyPrinter {
 	}
 	return &PrettyPrinter{indent: indent}
 }
+
+func (pp *PrettyPrinter) PrintNode(n *Node) (string, error) {
+	return "", nil
+}
