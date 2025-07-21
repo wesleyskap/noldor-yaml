@@ -61,3 +61,4 @@ func (pp *PrettyPrinter) writeNode(sb *strings.Builder, n *Node, level int) {
 }
 
 // MappingNode indentation support
+// SequenceNode bullet rendering
