@@ -248,3 +248,21 @@ func TestExplicitTag(t *testing.T) {
 	}
 }
 // TaggedStyle bitflag mutation check
+
+func TestPretty(t *testing.T) {
+	pp := yaml.NewPrettyPrinter(2)
+	node := &yaml.Node{
+		Kind: yaml.MappingNode,
+		Content: []*yaml.Node{
+			{Kind: yaml.ScalarNode, Value: "service"},
+			{Kind: yaml.ScalarNode, Value: "noldor"},
+		},
+	}
+	out, err := pp.PrintNode(node)
+	if err != nil {
+		t.Fatalf("failed pretty printing node: %v", err)
+	}
+	if !strings.Contains(out, "service: noldor") {
+		t.Errorf("unexpected pretty print output: %q", out)
+	}
+}
