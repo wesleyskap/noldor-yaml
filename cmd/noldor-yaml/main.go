@@ -125,3 +125,4 @@ func getKindName(k yaml.Kind) string {
 	}
 }
 
+// Help message updated
