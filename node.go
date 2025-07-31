@@ -1,4 +1,4 @@
-// Package yaml provides YAML encoding, decoding, and AST node parsing.
+﻿// Package yaml provides YAML encoding, decoding, and AST node parsing.
 package yaml
 
 import (
@@ -85,6 +85,4 @@ func (n *Node) IsZero() bool {
 	}
 	return n.Kind == 0 && n.Value == "" && len(n.Content) == 0
 }
-// LiteralStyle and FoldedStyle are exported
-// HeadComment and LineComment are memory aligned
-// TaggedStyle is exported
+

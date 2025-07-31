@@ -1,4 +1,4 @@
-package yaml
+﻿package yaml
 
 import (
 	"bufio"
@@ -238,5 +238,4 @@ func ParseBytes(b []byte) (*Node, error) {
 	p := NewParser(bytes.NewReader(b))
 	return p.ParseTree()
 }
-// Parser hooks for comment lines
-// Parser hooks for explicit tags
+

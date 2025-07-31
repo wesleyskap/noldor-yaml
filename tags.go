@@ -49,4 +49,3 @@ func (tr *ExplicitTagResolver) ApplyTagToNode(n *Node, tag string) error {
 	return nil
 }
 
-// Docstring with usage example

@@ -1,4 +1,4 @@
-package yaml
+﻿package yaml
 
 import (
 	"fmt"
@@ -90,3 +90,4 @@ func IsNullScalar(input string) bool {
 	val := strings.TrimSpace(input)
 	return val == "" || val == "~" || strings.ToLower(val) == "null"
 }
+

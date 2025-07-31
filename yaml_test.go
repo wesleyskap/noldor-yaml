@@ -3,7 +3,9 @@
 import (
 	"math"
 	"reflect"
+	"strings"
 	"testing"
+	"time"
 
 	"go.yaml.in/yaml/v4"
 )
@@ -128,7 +130,7 @@ func TestErrorMessageFormat(t *testing.T) {
 	}
 }
 
-func TestAnchorRegistry(t *testing.T) {
+func TestAnchorRegistryAndAliases(t *testing.T) {
 	reg := yaml.NewAnchorRegistry()
 	targetNode := &yaml.Node{Kind: yaml.ScalarNode, Value: "target_value"}
 	if err := reg.Register("base", targetNode); err != nil {
@@ -138,12 +140,6 @@ func TestAnchorRegistry(t *testing.T) {
 	if err != nil || resolved.Value != "target_value" {
 		t.Fatalf("failed resolving anchor: %v", err)
 	}
-}
-
-func TestAnchorAliases(t *testing.T) {
-	reg := yaml.NewAnchorRegistry()
-	targetNode := &yaml.Node{Kind: yaml.ScalarNode, Value: "target_value"}
-	_ = reg.Register("base", targetNode)
 
 	root := &yaml.Node{
 		Kind: yaml.SequenceNode,
@@ -159,7 +155,7 @@ func TestAnchorAliases(t *testing.T) {
 	}
 }
 
-func TestMergeKey(t *testing.T) {
+func TestMergeKeyResolver(t *testing.T) {
 	reg := yaml.NewAnchorRegistry()
 	baseMap := &yaml.Node{
 		Kind: yaml.MappingNode,
@@ -183,21 +179,22 @@ func TestMergeKey(t *testing.T) {
 	if err := m.ApplyMerge(targetMap); err != nil {
 		t.Fatalf("failed applying merge key: %v", err)
 	}
+	if len(targetMap.Content) != 4 {
+		t.Errorf("expected 4 elements in merged map content, got %d", len(targetMap.Content))
+	}
 }
-// Verify merged content length check
 
-func TestTimestamp(t *testing.T) {
+func TestTimestampParsing(t *testing.T) {
 	ts, err := yaml.ParseTimestamp("2025-06-01T12:30:00Z")
 	if err != nil {
 		t.Fatalf("failed parsing timestamp: %v", err)
 	}
-	if ts.Year() != 2025 {
+	if ts.Year() != 2025 || ts.Month() != time.June || ts.Day() != 1 {
 		t.Errorf("unexpected parsed date: %v", ts)
 	}
 }
-// Verify date component assertions
 
-func TestStream(t *testing.T) {
+func TestStreamDecoder(t *testing.T) {
 	input := "doc: 1\n---\ndoc: 2\n"
 	dec := yaml.NewStreamDecoder(strings.NewReader(input))
 	var count int
@@ -212,18 +209,16 @@ func TestStream(t *testing.T) {
 		t.Errorf("expected 2 documents, got %d", count)
 	}
 }
-// Verify stream iteration count
 
-func TestBlockScalar(t *testing.T) {
+func TestBlockScalarFormatter(t *testing.T) {
 	formatter := yaml.NewBlockScalarFormatter(2, "clip")
 	res := formatter.FormatLiteral("first line\nsecond line")
 	if !strings.Contains(res, "|\n  first line\n  second line") {
 		t.Errorf("unexpected formatted literal: %q", res)
 	}
 }
-// Indentation padding test
 
-func TestComment(t *testing.T) {
+func TestCommentPreserver(t *testing.T) {
 	cp := yaml.NewCommentPreserver()
 	cp.AttachComment(1, "# header comment")
 	node := &yaml.Node{Line: 1, Kind: yaml.ScalarNode, Value: "v"}
@@ -234,9 +229,8 @@ func TestComment(t *testing.T) {
 		t.Errorf("expected header comment, got %q", node.HeadComment)
 	}
 }
-// Child node persistence check
 
-func TestExplicitTag(t *testing.T) {
+func TestExplicitTagResolver(t *testing.T) {
 	tr := yaml.NewExplicitTagResolver()
 	tr.RegisterTag("!custom", "tag:yaml.org,2002:custom")
 	node := &yaml.Node{Kind: yaml.ScalarNode, Value: "data"}
@@ -247,9 +241,8 @@ func TestExplicitTag(t *testing.T) {
 		t.Errorf("expected !custom tag, got %q", node.Tag)
 	}
 }
-// TaggedStyle bitflag mutation check
 
-func TestPretty(t *testing.T) {
+func TestPrettyPrinter(t *testing.T) {
 	pp := yaml.NewPrettyPrinter(2)
 	node := &yaml.Node{
 		Kind: yaml.MappingNode,
@@ -266,3 +259,4 @@ func TestPretty(t *testing.T) {
 		t.Errorf("unexpected pretty print output: %q", out)
 	}
 }
+
