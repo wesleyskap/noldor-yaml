@@ -17,7 +17,8 @@ type Encoder struct {
 
 // NewEncoder initializes an Encoder bound to an io.Writer.
 // Usage example:
-//   enc := yaml.NewEncoder(w)
+//
+//	enc := yaml.NewEncoder(w)
 func NewEncoder(w io.Writer) *Encoder {
 	return &Encoder{
 		writer: w,
@@ -27,7 +28,8 @@ func NewEncoder(w io.Writer) *Encoder {
 
 // NewNodeEncoder initializes an Encoder that populates a Node tree.
 // Usage example:
-//   enc := yaml.NewNodeEncoder(node)
+//
+//	enc := yaml.NewNodeEncoder(node)
 func NewNodeEncoder(n *Node) *NodeEncoderHelper {
 	return &NodeEncoderHelper{target: n}
 }
@@ -49,7 +51,8 @@ func (h *NodeEncoderHelper) Encode(v interface{}) error {
 
 // Encode converts value v into YAML output written to the destination stream.
 // Usage example:
-//   err := enc.Encode(myStruct)
+//
+//	err := enc.Encode(myStruct)
 func (e *Encoder) Encode(v interface{}) error {
 	rv := reflect.ValueOf(v)
 	node, err := valueToNode(rv)

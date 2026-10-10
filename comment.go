@@ -1,4 +1,4 @@
-﻿package yaml
+package yaml
 
 import (
 	"fmt"
@@ -13,7 +13,8 @@ type CommentPreserver struct {
 
 // NewCommentPreserver constructs a new comment registry.
 // Usage example:
-//   cp := NewCommentPreserver()
+//
+//	cp := NewCommentPreserver()
 func NewCommentPreserver() *CommentPreserver {
 	return &CommentPreserver{
 		comments: make(map[int]string),
@@ -22,21 +23,24 @@ func NewCommentPreserver() *CommentPreserver {
 
 // AttachComment attaches comment text to a specific node line.
 // Usage example:
-//   cp.AttachComment(14, "# Configuration start")
+//
+//	cp.AttachComment(14, "# Configuration start")
 func (cp *CommentPreserver) AttachComment(line int, text string) {
 	cp.comments[line] = strings.TrimSpace(text)
 }
 
 // GetComment retrieves comment by line number.
 // Usage example:
-//   c := cp.GetComment(14)
+//
+//	c := cp.GetComment(14)
 func (cp *CommentPreserver) GetComment(line int) string {
 	return cp.comments[line]
 }
 
 // ApplyToNode injects stored comments directly into AST node fields.
 // Usage example:
-//   err := cp.ApplyToNode(node)
+//
+//	err := cp.ApplyToNode(node)
 func (cp *CommentPreserver) ApplyToNode(n *Node) error {
 	if n == nil {
 		return fmt.Errorf("yaml: cannot attach comment to nil node")
@@ -51,4 +55,3 @@ func (cp *CommentPreserver) ApplyToNode(n *Node) error {
 	}
 	return nil
 }
-

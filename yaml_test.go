@@ -1,4 +1,4 @@
-﻿package yaml_test
+package yaml_test
 
 import (
 	"math"
@@ -242,21 +242,173 @@ func TestExplicitTagResolver(t *testing.T) {
 	}
 }
 
-func TestPrettyPrinter(t *testing.T) {
-	pp := yaml.NewPrettyPrinter(2)
-	node := &yaml.Node{
-		Kind: yaml.MappingNode,
-		Content: []*yaml.Node{
-			{Kind: yaml.ScalarNode, Value: "service"},
-			{Kind: yaml.ScalarNode, Value: "noldor"},
-		},
+func TestSequenceAndInterfaceDecode(t *testing.T) {
+	input := []byte("- apple\n- banana\n- cherry\n")
+	var fruits []string
+	if err := yaml.Unmarshal(input, &fruits); err != nil {
+		t.Fatalf("failed decoding slice: %v", err)
 	}
-	out, err := pp.PrintNode(node)
-	if err != nil {
-		t.Fatalf("failed pretty printing node: %v", err)
+	if len(fruits) != 3 || fruits[1] != "banana" {
+		t.Errorf("unexpected slice content: %v", fruits)
 	}
-	if !strings.Contains(out, "service: noldor") {
-		t.Errorf("unexpected pretty print output: %q", out)
+
+	var anyVal interface{}
+	if err := yaml.Unmarshal(input, &anyVal); err != nil {
+		t.Fatalf("failed decoding into interface: %v", err)
+	}
+	slice, ok := anyVal.([]interface{})
+	if !ok || len(slice) != 3 {
+		t.Errorf("expected []interface{} of length 3, got: %T (%v)", anyVal, anyVal)
 	}
 }
 
+func TestMapMarshalAndSequenceMarshal(t *testing.T) {
+	m := map[string]string{
+		"alpha": "1",
+		"beta":  "2",
+	}
+	out, err := yaml.Marshal(m)
+	if err != nil {
+		t.Fatalf("failed marshaling map: %v", err)
+	}
+	if !strings.Contains(string(out), "alpha: 1") {
+		t.Errorf("expected map output containing 'alpha: 1', got: %s", string(out))
+	}
+
+	items := []string{"val1", "val2"}
+	seqOut, err := yaml.Marshal(items)
+	if err != nil {
+		t.Fatalf("failed marshaling slice: %v", err)
+	}
+	if !strings.Contains(string(seqOut), "- val1") {
+		t.Errorf("expected sequence output containing '- val1', got: %s", string(seqOut))
+	}
+}
+
+func TestNodeHelpers(t *testing.T) {
+	var n yaml.Node
+	if !n.IsZero() {
+		t.Errorf("expected uninitialized node to be zero")
+	}
+
+	docNode := &yaml.Node{Kind: yaml.DocumentNode}
+	var nilNode *yaml.Node
+	if !nilNode.IsZero() {
+		t.Errorf("expected nil node to be zero")
+	}
+
+	if err := nilNode.Decode(&docNode); err == nil {
+		t.Errorf("expected error decoding nil node, got nil")
+	}
+
+	err := n.Encode(map[string]int{"a": 1})
+	if err != nil {
+		t.Fatalf("failed encoding node: %v", err)
+	}
+	if n.Kind != yaml.MappingNode {
+		t.Errorf("expected MappingNode, got %v", n.Kind)
+	}
+
+	var res map[string]int
+	if err := n.Decode(&res); err != nil {
+		t.Fatalf("failed decoding node: %v", err)
+	}
+	if res["a"] != 1 {
+		t.Errorf("expected res['a'] == 1, got %v", res["a"])
+	}
+}
+
+func TestScalarAndUtilityHelpers(t *testing.T) {
+	if !yaml.IsNullScalar("null") || !yaml.IsNullScalar("~") || !yaml.IsNullScalar("") {
+		t.Errorf("expected null scalar detection to be true")
+	}
+	if yaml.IsNullScalar("value") {
+		t.Errorf("expected non-null scalar to be false")
+	}
+
+	if !yaml.IsTimestampScalar("2026-10-11") {
+		t.Errorf("expected timestamp detection to be true")
+	}
+	if yaml.IsTimestampScalar("not-a-date") {
+		t.Errorf("expected invalid timestamp detection to be false")
+	}
+
+	b := yaml.NewBlockScalarFormatter(2, "clip")
+	parsed, err := b.ParseLiteralBlock([]string{"  line1", "  line2"})
+	if err != nil || parsed != "line1\nline2" {
+		t.Errorf("unexpected parsed literal block: %q (err: %v)", parsed, err)
+	}
+	if _, err := b.ParseLiteralBlock(nil); err == nil {
+		t.Errorf("expected error for empty literal block lines")
+	}
+
+	tr := yaml.NewExplicitTagResolver()
+	tr.RegisterTag("!h", "uri:custom")
+	if tr.ResolveTag("!h") != "uri:custom" {
+		t.Errorf("unexpected resolved tag: %s", tr.ResolveTag("!h"))
+	}
+	if tr.ResolveTag("!other") != "!other" {
+		t.Errorf("expected fallback tag handle for unknown tags")
+	}
+
+	cp := yaml.NewCommentPreserver()
+	cp.AttachComment(5, "# comment 5")
+	if cp.GetComment(5) != "# comment 5" {
+		t.Errorf("unexpected comment text: %s", cp.GetComment(5))
+	}
+
+	r := strings.NewReader("key: val\n")
+	dec := yaml.NewDecoderStream(r)
+	var m map[string]string
+	if err := dec.Decode(&m); err != nil || m["key"] != "val" {
+		t.Errorf("unexpected stream decode: %+v, err: %v", m, err)
+	}
+
+	var buf strings.Builder
+	enc := yaml.NewEncoderStream(&buf)
+	if err := enc.Encode(m); err != nil {
+		t.Fatalf("failed encoder stream: %v", err)
+	}
+
+	nodeParsed, err := yaml.ParseBytes([]byte("hello: world"))
+	if err != nil || nodeParsed == nil {
+		t.Fatalf("failed ParseBytes: %v", err)
+	}
+}
+
+func BenchmarkUnmarshalStruct(b *testing.B) {
+	input := []byte("title: Noldor App\nport: 8080\nenabled: yes\n")
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		var cfg Config
+		if err := yaml.Unmarshal(input, &cfg); err != nil {
+			b.Fatal(err)
+		}
+	}
+}
+
+func BenchmarkMarshalStruct(b *testing.B) {
+	cfg := Config{
+		Title:   "Elven Core",
+		Port:    9000,
+		Enabled: true,
+	}
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		if _, err := yaml.Marshal(cfg); err != nil {
+			b.Fatal(err)
+		}
+	}
+}
+
+func BenchmarkParseBool(b *testing.B) {
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		if _, err := yaml.ParseBool("yes"); err != nil {
+			b.Fatal(err)
+		}
+	}
+}

@@ -1,4 +1,4 @@
-﻿package yaml
+package yaml
 
 import (
 	"fmt"
@@ -8,13 +8,14 @@ import (
 // BlockScalarFormatter formats block scalar styles (Literal | and Folded >).
 // Struct fields are memory-aligned.
 type BlockScalarFormatter struct {
-	indent int
+	indent   int
 	chomping string
 }
 
 // NewBlockScalarFormatter initializes block scalar handler.
 // Usage example:
-//   b := NewBlockScalarFormatter(2, "strip")
+//
+//	b := NewBlockScalarFormatter(2, "strip")
 func NewBlockScalarFormatter(indent int, chomping string) *BlockScalarFormatter {
 	return &BlockScalarFormatter{
 		indent:   indent,
@@ -24,7 +25,8 @@ func NewBlockScalarFormatter(indent int, chomping string) *BlockScalarFormatter 
 
 // FormatLiteral formats multiline strings using literal style '|'.
 // Usage example:
-//   out := b.FormatLiteral("line1\nline2")
+//
+//	out := b.FormatLiteral("line1\nline2")
 func (b *BlockScalarFormatter) FormatLiteral(text string) string {
 	lines := strings.Split(text, "\n")
 	pad := strings.Repeat(" ", b.indent)
@@ -45,7 +47,8 @@ func (b *BlockScalarFormatter) FormatLiteral(text string) string {
 
 // ParseLiteralBlock extracts text from literal block lines.
 // Usage example:
-//   txt, err := b.ParseLiteralBlock(lines)
+//
+//	txt, err := b.ParseLiteralBlock(lines)
 func (b *BlockScalarFormatter) ParseLiteralBlock(lines []string) (string, error) {
 	if len(lines) == 0 {
 		return "", fmt.Errorf("yaml: empty block scalar lines, expected content lines")
@@ -56,4 +59,3 @@ func (b *BlockScalarFormatter) ParseLiteralBlock(lines []string) (string, error)
 	}
 	return strings.Join(clean, "\n"), nil
 }
-

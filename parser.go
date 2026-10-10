@@ -1,4 +1,4 @@
-﻿package yaml
+package yaml
 
 import (
 	"bufio"
@@ -16,7 +16,8 @@ type Parser struct {
 
 // NewParser constructs a Parser bound to an input reader.
 // Usage example:
-//   p := NewParser(r)
+//
+//	p := NewParser(r)
 func NewParser(r io.Reader) *Parser {
 	return &Parser{
 		reader: bufio.NewReader(r),
@@ -26,7 +27,8 @@ func NewParser(r io.Reader) *Parser {
 
 // ParseTree parses the input stream into a root DocumentNode AST.
 // Usage example:
-//   doc, err := p.ParseTree()
+//
+//	doc, err := p.ParseTree()
 func (p *Parser) ParseTree() (*Node, error) {
 	data, err := io.ReadAll(p.reader)
 	if err != nil {
@@ -233,9 +235,9 @@ func getIndent(line string) int {
 
 // ParseBytes helper function to parse raw bytes into a Node tree.
 // Usage example:
-//   node, err := ParseBytes([]byte("key: val"))
+//
+//	node, err := ParseBytes([]byte("key: val"))
 func ParseBytes(b []byte) (*Node, error) {
 	p := NewParser(bytes.NewReader(b))
 	return p.ParseTree()
 }
-

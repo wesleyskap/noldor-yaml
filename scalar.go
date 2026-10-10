@@ -1,4 +1,4 @@
-﻿package yaml
+package yaml
 
 import (
 	"fmt"
@@ -9,7 +9,8 @@ import (
 
 // ParseBool resolves YAML 1.1 and 1.2 boolean scalars.
 // Usage example:
-//   b, err := ParseBool("yes")
+//
+//	b, err := ParseBool("yes")
 func ParseBool(input string) (bool, error) {
 	val := strings.TrimSpace(strings.ToLower(input))
 	switch val {
@@ -24,7 +25,8 @@ func ParseBool(input string) (bool, error) {
 
 // ParseInt resolves decimal, hex, binary, and octal integer scalars.
 // Usage example:
-//   n, err := ParseInt("0755")
+//
+//	n, err := ParseInt("0755")
 func ParseInt(input string) (int64, error) {
 	val := strings.TrimSpace(input)
 	if val == "" {
@@ -68,7 +70,8 @@ func parseLegacyOctalOrDecimal(val string) (int64, error) {
 
 // ParseFloat resolves scalar representation into float64.
 // Usage example:
-//   f, err := ParseFloat(".inf")
+//
+//	f, err := ParseFloat(".inf")
 func ParseFloat(input string) (float64, error) {
 	val := strings.TrimSpace(strings.ToLower(input))
 	switch val {
@@ -85,9 +88,9 @@ func ParseFloat(input string) (float64, error) {
 
 // IsNullScalar determines if a scalar string represents a null value.
 // Usage example:
-//   isNull := IsNullScalar("null")
+//
+//	isNull := IsNullScalar("null")
 func IsNullScalar(input string) bool {
 	val := strings.TrimSpace(input)
 	return val == "" || val == "~" || strings.ToLower(val) == "null"
 }
-

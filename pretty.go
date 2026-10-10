@@ -1,4 +1,4 @@
-﻿package yaml
+package yaml
 
 import (
 	"fmt"
@@ -13,7 +13,8 @@ type PrettyPrinter struct {
 
 // NewPrettyPrinter constructs a new pretty printer with specified indentation.
 // Usage example:
-//   pp := NewPrettyPrinter(2)
+//
+//	pp := NewPrettyPrinter(2)
 func NewPrettyPrinter(indent int) *PrettyPrinter {
 	if indent <= 0 {
 		indent = 2
@@ -23,7 +24,8 @@ func NewPrettyPrinter(indent int) *PrettyPrinter {
 
 // PrintNode converts a Node AST hierarchy into a formatted YAML string.
 // Usage example:
-//   out, err := pp.PrintNode(docNode)
+//
+//	out, err := pp.PrintNode(docNode)
 func (pp *PrettyPrinter) PrintNode(n *Node) (string, error) {
 	if n == nil {
 		return "", fmt.Errorf("yaml: cannot pretty print nil node")
@@ -59,4 +61,3 @@ func (pp *PrettyPrinter) writeNode(sb *strings.Builder, n *Node, level int) {
 		sb.WriteString(fmt.Sprintf("%s%s\n", pad, n.Value))
 	}
 }
-

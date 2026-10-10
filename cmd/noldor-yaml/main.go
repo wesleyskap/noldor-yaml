@@ -1,4 +1,4 @@
-﻿package main
+package main
 
 import (
 	"fmt"
@@ -64,6 +64,10 @@ func runPretty(args []string) {
 		fmt.Printf("YAML parsing error: %v\n", err)
 		os.Exit(1)
 	}
+	printPrettyNode(tree)
+}
+
+func printPrettyNode(tree *yaml.Node) {
 	pp := yaml.NewPrettyPrinter(2)
 	out, err := pp.PrintNode(tree)
 	if err != nil {
@@ -124,4 +128,3 @@ func getKindName(k yaml.Kind) string {
 		return "Unknown"
 	}
 }
-

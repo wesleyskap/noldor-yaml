@@ -17,7 +17,8 @@ type Decoder struct {
 
 // NewDecoder creates a Decoder reading from an io.Reader.
 // Usage example:
-//   dec := yaml.NewDecoder(r)
+//
+//	dec := yaml.NewDecoder(r)
 func NewDecoder(r io.Reader) *Decoder {
 	return &Decoder{
 		reader: r,
@@ -27,7 +28,8 @@ func NewDecoder(r io.Reader) *Decoder {
 
 // NewDecoderFromNode creates a Decoder targeting an existing AST Node.
 // Usage example:
-//   dec := yaml.NewDecoderFromNode(node)
+//
+//	dec := yaml.NewDecoderFromNode(node)
 func NewDecoderFromNode(node *Node) *Decoder {
 	return &Decoder{
 		node: node,
@@ -37,7 +39,8 @@ func NewDecoderFromNode(node *Node) *Decoder {
 
 // Decode unmarshals the next YAML document into target pointer v.
 // Usage example:
-//   err := dec.Decode(&myStruct)
+//
+//	err := dec.Decode(&myStruct)
 func (d *Decoder) Decode(v interface{}) error {
 	rv := reflect.ValueOf(v)
 	if rv.Kind() != reflect.Ptr || rv.IsNil() {

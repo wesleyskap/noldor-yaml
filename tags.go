@@ -1,4 +1,4 @@
-﻿package yaml
+package yaml
 
 import (
 	"fmt"
@@ -13,7 +13,8 @@ type ExplicitTagResolver struct {
 
 // NewExplicitTagResolver initializes a tag handler.
 // Usage example:
-//   tr := NewExplicitTagResolver()
+//
+//	tr := NewExplicitTagResolver()
 func NewExplicitTagResolver() *ExplicitTagResolver {
 	return &ExplicitTagResolver{
 		tags: make(map[string]string),
@@ -22,14 +23,16 @@ func NewExplicitTagResolver() *ExplicitTagResolver {
 
 // RegisterTag maps custom tag prefix to full URI.
 // Usage example:
-//   tr.RegisterTag("!custom", "tag:yaml.org,2002:str")
+//
+//	tr.RegisterTag("!custom", "tag:yaml.org,2002:str")
 func (tr *ExplicitTagResolver) RegisterTag(handle, uri string) {
 	tr.tags[handle] = uri
 }
 
 // ResolveTag expands shorthand tag handles into resolved tag strings.
 // Usage example:
-//   resolved := tr.ResolveTag("!custom")
+//
+//	resolved := tr.ResolveTag("!custom")
 func (tr *ExplicitTagResolver) ResolveTag(handle string) string {
 	if uri, ok := tr.tags[handle]; ok {
 		return uri
@@ -39,7 +42,8 @@ func (tr *ExplicitTagResolver) ResolveTag(handle string) string {
 
 // ApplyTagToNode assigns an explicit tag to a target AST Node.
 // Usage example:
-//   err := tr.ApplyTagToNode(node, "!!binary")
+//
+//	err := tr.ApplyTagToNode(node, "!!binary")
 func (tr *ExplicitTagResolver) ApplyTagToNode(n *Node, tag string) error {
 	if n == nil {
 		return fmt.Errorf("yaml: cannot assign tag %q to nil node", tag)
@@ -48,4 +52,3 @@ func (tr *ExplicitTagResolver) ApplyTagToNode(n *Node, tag string) error {
 	n.Style |= TaggedStyle
 	return nil
 }
-

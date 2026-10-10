@@ -1,4 +1,4 @@
-﻿// Package yaml provides YAML encoding, decoding, and AST node parsing.
+// Package yaml provides YAML encoding, decoding, and AST node parsing.
 package yaml
 
 import (
@@ -57,8 +57,9 @@ type Node struct {
 
 // Decode unmarshals the node tree into the target Go value.
 // Usage example:
-//   var data map[string]string
-//   err := node.Decode(&data)
+//
+//	var data map[string]string
+//	err := node.Decode(&data)
 func (n *Node) Decode(target interface{}) error {
 	if n == nil {
 		return fmt.Errorf("yaml: cannot decode nil node into %T, expected valid node reference", target)
@@ -69,8 +70,9 @@ func (n *Node) Decode(target interface{}) error {
 
 // Encode populates the node tree from a Go value.
 // Usage example:
-//   var node yaml.Node
-//   err := node.Encode(map[string]string{"key": "value"})
+//
+//	var node yaml.Node
+//	err := node.Encode(map[string]string{"key": "value"})
 func (n *Node) Encode(value interface{}) error {
 	encoder := NewNodeEncoder(n)
 	return encoder.Encode(value)
@@ -78,11 +80,11 @@ func (n *Node) Encode(value interface{}) error {
 
 // IsZero checks whether the node is uninitialized.
 // Usage example:
-//   if node.IsZero() { ... }
+//
+//	if node.IsZero() { ... }
 func (n *Node) IsZero() bool {
 	if n == nil {
 		return true
 	}
 	return n.Kind == 0 && n.Value == "" && len(n.Content) == 0
 }
-

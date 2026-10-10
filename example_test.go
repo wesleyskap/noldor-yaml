@@ -39,4 +39,5 @@ func ExampleMarshal() {
 	// service: Noldor YAML
 	// port: 8080
 }
+
 // ExampleStreamDecoder

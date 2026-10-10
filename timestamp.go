@@ -1,4 +1,4 @@
-﻿package yaml
+package yaml
 
 import (
 	"fmt"
@@ -8,7 +8,8 @@ import (
 
 // ParseTimestamp parses standard ISO-8601 and YAML 1.1/1.2 timestamp scalar representations.
 // Usage example:
-//   t, err := ParseTimestamp("2025-06-01T12:00:00Z")
+//
+//	t, err := ParseTimestamp("2025-06-01T12:00:00Z")
 func ParseTimestamp(input string) (time.Time, error) {
 	val := strings.TrimSpace(input)
 	if val == "" {
@@ -31,9 +32,9 @@ func ParseTimestamp(input string) (time.Time, error) {
 
 // IsTimestampScalar checks if a string scalar matches common date patterns.
 // Usage example:
-//   ok := IsTimestampScalar("2025-06-01")
+//
+//	ok := IsTimestampScalar("2025-06-01")
 func IsTimestampScalar(input string) bool {
 	_, err := ParseTimestamp(input)
 	return err == nil
 }
-
